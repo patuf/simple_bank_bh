@@ -8,10 +8,10 @@ import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
 @Component
-class AccountModelAssembler implements RepresentationModelAssembler<Account, EntityModel<Account>> {
+public class AccountModelAssembler<T extends Account> implements RepresentationModelAssembler<T, EntityModel<T>> {
 
     @Override
-    public EntityModel<Account> toModel(Account account) {
+    public EntityModel<T> toModel(T account) {
 
         return EntityModel.of(account, //
                 linkTo(methodOn(AccountController.class).one(account.getId())).withSelfRel(),

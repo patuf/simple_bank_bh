@@ -1,5 +1,6 @@
 package com.simplebank.accounts.report;
 
+import com.simplebank.accounts.acc.AccountModelAssembler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +26,8 @@ public class ReportController {
     PagedResourcesAssembler<CustomerAndBalance> custResourceAssembler;
     @Autowired
     PagedResourcesAssembler<AccountAndBalance> accResourceAssembler;
+    @Autowired
+    AccountModelAssembler<AccountAndBalance> accModelAssembler;
 
     @GetMapping("/customers")
 //    public CollectionModel<EntityModel<CustomerAndBalance>> getCustomers(Pageable pageable) {
@@ -34,7 +37,7 @@ public class ReportController {
 
         return custResourceAssembler.toModel(custPage, customer -> {
             return EntityModel.of(customer,
-                    linkTo(methodOn(ReportController.class).getAccounts(customer.getCustomerId(), pageable)).withRel("accounts"));
+                    linkTo(methodOn(ReportController.class).getAccounts(customer.getCustomerId(), pageable)).withRel("customerAccounts"));
         });
     }
 
@@ -42,10 +45,7 @@ public class ReportController {
     public CollectionModel<EntityModel<AccountAndBalance>> getAccounts(@PathVariable long customerId, Pageable pageable) {
         Page<AccountAndBalance> accountsPage = reportDao.findAccountByCustomerId(customerId, pageable);
 
-        return accResourceAssembler.toModel(accountsPage, account -> {
-            return EntityModel.of(account,
-                    linkTo(methodOn(ReportController.class).getTransactions(account.getId(), pageable)).withRel("transactions"));
-        });
+        return accResourceAssembler.toModel(accountsPage, accModelAssembler::toModel);
     }
 
     @GetMapping("/accountTransactions/{accountId}")

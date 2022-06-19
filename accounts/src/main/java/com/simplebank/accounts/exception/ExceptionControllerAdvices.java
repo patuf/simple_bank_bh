@@ -1,6 +1,5 @@
 package com.simplebank.accounts.exception;
 
-import com.simplebank.accounts.customer.CustomerNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;

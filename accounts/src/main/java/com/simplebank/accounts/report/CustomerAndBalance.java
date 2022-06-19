@@ -2,36 +2,9 @@ package com.simplebank.accounts.report;
 
 import com.simplebank.accounts.customer.Customer;
 
-public class CustomerAndBalance {
-    Long customerId;
-    String name;
-    String surname;
+public class CustomerAndBalance extends Customer {
     int numAccounts;
     double balance;
-
-    public Long getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
 
     public int getNumAccounts() {
         return numAccounts;

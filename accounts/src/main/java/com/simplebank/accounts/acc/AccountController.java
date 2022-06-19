@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,7 +24,7 @@ public class AccountController {
     @Autowired
     TransactionOutboxRepository troutRepo;
     @Autowired
-    AccountModelAssembler assembler;
+    AccountModelAssembler<Account> accModelAssembler;
     @Autowired
     CustomerDataProvider customerDataProvider;
 
@@ -37,7 +35,7 @@ public class AccountController {
         log.info("Found account");
 
 
-        return assembler.toModel(account);
+        return accModelAssembler.toModel(account);
     }
 
     @PostMapping
@@ -54,7 +52,7 @@ public class AccountController {
             troutRepo.save(new CreateTransactionCommandOutbox(request.getCustomerId(), newAccount.getId(), request.getInitialCredit()));
         }
 
-        EntityModel<Account> entityModel = assembler.toModel(newAccount);
+        EntityModel<Account> entityModel = accModelAssembler.toModel(newAccount);
 
         return ResponseEntity //
                 .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()) //

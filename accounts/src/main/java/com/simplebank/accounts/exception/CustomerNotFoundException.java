@@ -1,6 +1,4 @@
-package com.simplebank.accounts.customer;
-
-import com.simplebank.accounts.exception.ResourceNotFoundException;
+package com.simplebank.accounts.exception;
 
 public class CustomerNotFoundException extends ResourceNotFoundException {
 

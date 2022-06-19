@@ -1,7 +1,7 @@
 package com.simplebank.accounts.customer;
 
+import com.simplebank.accounts.exception.CustomerNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 
 public class LocalRepoCustomerDataProvider implements CustomerDataProvider {
 
