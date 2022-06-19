@@ -1,33 +1,15 @@
-package com.simplebank.accounts.acc;
+package com.simplebank.accounts.report;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
+import com.simplebank.accounts.acc.AccountStatus;
+
 import java.time.ZonedDateTime;
 
-@Entity
-public class Account {
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+public class AccountAndBalance {
     private Long id;
-    @NotNull
     private Long customerId;
-    @NotNull
     private ZonedDateTime timeCreated;
-    @NotNull
     private AccountStatus accountStatus;
-
-    public Account() {
-
-    }
-
-    public Account(Long customerId, ZonedDateTime timeCreated, AccountStatus accountStatus) {
-        this.customerId = customerId;
-        this.timeCreated = timeCreated;
-        this.accountStatus = accountStatus;
-    }
+    private Double balance;
 
     public Long getId() {
         return id;
@@ -61,4 +43,11 @@ public class Account {
         this.accountStatus = accountStatus;
     }
 
+    public Double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Double balance) {
+        this.balance = balance;
+    }
 }

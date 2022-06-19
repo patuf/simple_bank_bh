@@ -1,58 +1,63 @@
 package com.simplebank.accounts.acc;
 
-import com.gruelbox.transactionoutbox.TransactionOutbox;
-import com.simplebank.accounts.customer.Customer;
-import com.simplebank.accounts.customer.CustomerDataProvider;
 import com.simplebank.accounts.customer.CustomerNotFoundException;
 import com.simplebank.accounts.customer.CustomerRepository;
-import org.hibernate.sql.Template;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.ZonedDateTime;
-import java.util.Optional;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController()
 @RequestMapping("rest/v1.0/account")
 public class AccountController {
+    private final Log log = LogFactory.getLog(getClass());
     @Autowired
     AccountRepository accRepo;
     @Autowired
     CustomerRepository customerRepo;
     @Autowired
+    TransactionOutboxRepository troutRepo;
+    @Autowired
     AccountModelAssembler assembler;
     @Autowired
-    TransactionOutbox outbox;
+    KafkaTemplate<CreateTransactionOutbox, CreateTransactionOutbox> kafka;
     @Autowired
-    KafkaTemplate<CreateTransactionCommand, CreateTransactionCommand> kafka;
+    PagedResourcesAssembler<Account> pagedResourcesAssembler;
 
-//    @GetMapping(path="/transactions/{userId}")
-//    EntityModel<Object> getTransactions(@PathVariable long userId) {
-//        Optional<Customer> customer = customerRepo.findById(userId);
-//        return EntityModel.of(customer, //
-//                linkTo(methodOn(AccountController.class).one(id)).withSelfRel(),
-//                linkTo(methodOn(AccountController.class).all()).withRel("employees"));
-//        return EntityModel.of(new Object(),linkTo(methodOn(AccountController.class).one(userId)).withSelfRel());
-//    }
+    @GetMapping("/byCustomer/{customerId}")
+    ResponseEntity<PagedModel<EntityModel<Account>>> getAccountsByUsedId(@PathVariable long customerId, Pageable pageable) {
+        Page<Account> accountsPage = accRepo.getAccountsByCustomerId(customerId, pageable);
+
+        PagedModel<EntityModel<Account>> collModel = pagedResourcesAssembler.toModel(accountsPage);
+
+        return new ResponseEntity<>(collModel, HttpStatus.OK);
+    }
+
 
     @PostMapping
     @Transactional
     ResponseEntity<?> createAccount(@RequestBody CreateAccountRequest request) {
         customerRepo.findById(request.getCustomerId()).orElseThrow(() -> new CustomerNotFoundException(request.getCustomerId()));
 //        customerDataProvider.findById(request.getCustomerId());
-        Account newAccount = new Account(request.getCustomerId(), ZonedDateTime.now(), Account.AccountStatus.ACTIVE);
+        Account newAccount = new Account(request.getCustomerId(), ZonedDateTime.now(), AccountStatus.ACTIVE);
         newAccount = accRepo.save(newAccount);
 
         if (request.getInitialCredit() != 0) {
-            outbox.schedule(getClass()).publishCreateTransactionCommand(new CreateTransactionCommand(request.getCustomerId(), newAccount.getId(), request.getInitialCredit()));
+            troutRepo.save(new CreateTransactionOutbox(request.getCustomerId(), newAccount.getId(), request.getInitialCredit()));
         }
 
         EntityModel<CreateAccountRequest> entityModel = assembler.toModel(request);
@@ -63,7 +68,8 @@ public class AccountController {
     }
 
 
-    void publishCreateTransactionCommand(CreateTransactionCommand command) {
+    void publishCreateTransactionCommand(CreateTransactionOutbox command) {
+        log.info("Gonna send to kafka now");
 //        kafka.send();
     }
 }
