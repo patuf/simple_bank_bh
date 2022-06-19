@@ -1,6 +1,8 @@
 package com.simplebank.accounts.customer;
 
+import java.util.Optional;
+
 public interface CustomerDataProvider {
 
-    public Customer findById(long customerId);
+    public Optional<Customer> findById(long customerId);
 }

@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -16,6 +17,8 @@ class ReportDao {
 
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
+//    @Autowired
+//    private RestTemplate restTemplate;
 
     public Page<CustomerAndBalance> findAllCustomers(Pageable pageable) {
         SqlParameterSource namedParameters;

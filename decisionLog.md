@@ -19,3 +19,7 @@ No secutiry will be implemented, nor is needed by the requirements.
 * endpoind: /customers + number of accounts & total balance, pageable
 * endpoint: /all accounts for customer, with date of creation and balance, pageable
 * endpoint: /all transactions for an account, pageable
+
+### Aggregate Roots
+Both Account and Customer are considered aggregate roots. Trying to keep the implementation closer to the real world , each of these entities seems to have its own complexity.
+Keeping them as separate aggregates would also help forking out a separate Users microservice.

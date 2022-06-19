@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class CreateTransactionCommandOutbox {
+public class CreateTransactionCommand {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -19,10 +19,10 @@ public class CreateTransactionCommandOutbox {
     @NotNull
     private double amount;
 
-    public CreateTransactionCommandOutbox() {
+    public CreateTransactionCommand() {
     }
 
-    public CreateTransactionCommandOutbox(long customerId, long accId, double amount) {
+    public CreateTransactionCommand(long customerId, long accId, double amount) {
         this.customerId = customerId;
         this.accId = accId;
         this.amount = amount;

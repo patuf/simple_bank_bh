@@ -1,9 +1,10 @@
 package com.simplebank.accounts.acc;
 
-import com.simplebank.accounts.acc.transactionoutbox.CreateTransactionCommandOutbox;
-import com.simplebank.accounts.acc.transactionoutbox.TransactionOutboxRepository;
+import com.simplebank.accounts.acc.transactionoutbox.CreateTransactionCommand;
+import com.simplebank.accounts.acc.transactionoutbox.CreateTransactionCommandRepository;
 import com.simplebank.accounts.customer.CustomerDataProvider;
 import com.simplebank.accounts.exception.AccountNotFoundException;
+import com.simplebank.accounts.exception.CustomerNotFoundException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 
@@ -22,7 +24,7 @@ public class AccountController {
     @Autowired
     AccountRepository accRepo;
     @Autowired
-    TransactionOutboxRepository troutRepo;
+    CreateTransactionCommandRepository troutRepo;
     @Autowired
     AccountModelAssembler<Account> accModelAssembler;
     @Autowired
@@ -39,17 +41,14 @@ public class AccountController {
     }
 
     @PostMapping
-//    @Transactional
-//    @Validated
+    @Transactional
     ResponseEntity<?> createAccount(@Valid @RequestBody CreateAccountRequest request) {
         // Customer data not needed, just checking for customer existence
-//        customerRepo.findById(request.getCustomerId()).orElseThrow(() -> new CustomerNotFoundException(request.getCustomerId()));
-        customerDataProvider.findById(request.getCustomerId());
-        Account newAccount = new Account(request.getCustomerId(), LocalDateTime.now(), AccountStatus.ACTIVE);
-        newAccount = accRepo.save(newAccount);
+        customerDataProvider.findById(request.getCustomerId()).orElseThrow(() -> new CustomerNotFoundException(request.getCustomerId()));
+        Account newAccount = accRepo.save(new Account(request.getCustomerId(), LocalDateTime.now(), AccountStatus.ACTIVE));
 
         if (request.getInitialCredit() != 0) {
-            troutRepo.save(new CreateTransactionCommandOutbox(request.getCustomerId(), newAccount.getId(), request.getInitialCredit()));
+            troutRepo.save(new CreateTransactionCommand(request.getCustomerId(), newAccount.getId(), request.getInitialCredit()));
         }
 
         EntityModel<Account> entityModel = accModelAssembler.toModel(newAccount);

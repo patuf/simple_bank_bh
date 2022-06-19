@@ -52,18 +52,6 @@
 			<artifactId>spring-integration-jpa</artifactId>
 			<version>5.5.12</version>
 		</dependency>
-
-		<!-- dependency>
-			<groupId>com.gruelbox</groupId>
-			<artifactId>transactionoutbox-spring</artifactId>
-			<version>4.3.281</version>
-		</dependency -->
-
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<scope>runtime</scope>
-		</dependency>
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
