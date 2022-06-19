@@ -5,25 +5,25 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
 @Entity
 public class Account {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
     private Long customerId;
     @NotNull
-    private ZonedDateTime timeCreated;
+    private LocalDateTime timeCreated;
     @NotNull
     private AccountStatus accountStatus;
 
     public Account() {
-
     }
 
-    public Account(Long customerId, ZonedDateTime timeCreated, AccountStatus accountStatus) {
+    public Account(Long customerId, LocalDateTime timeCreated, AccountStatus accountStatus) {
         this.customerId = customerId;
         this.timeCreated = timeCreated;
         this.accountStatus = accountStatus;
@@ -45,11 +45,11 @@ public class Account {
         this.customerId = customerId;
     }
 
-    public ZonedDateTime getTimeCreated() {
+    public LocalDateTime getTimeCreated() {
         return timeCreated;
     }
 
-    public void setTimeCreated(ZonedDateTime timeCreated) {
+    public void setTimeCreated(LocalDateTime timeCreated) {
         this.timeCreated = timeCreated;
     }
 
@@ -59,6 +59,10 @@ public class Account {
 
     public void setAccountStatus(AccountStatus accountStatus) {
         this.accountStatus = accountStatus;
+    }
+
+    public void setAccountStatus(int accountStatus) {
+        this.accountStatus = AccountStatus.values()[accountStatus];
     }
 
 }

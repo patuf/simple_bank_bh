@@ -1,7 +1,7 @@
 package com.simplebank.accounts;
 
-import com.simplebank.accounts.acc.CreateTransactionOutbox;
-import com.simplebank.accounts.acc.TransactionOutboxRepository;
+import com.simplebank.accounts.acc.transactionoutbox.CreateTransactionCommandOutbox;
+import com.simplebank.accounts.acc.transactionoutbox.TransactionOutboxRepository;
 import com.simplebank.accounts.customer.CustomerDataProvider;
 import com.simplebank.accounts.customer.CustomerRepository;
 import com.simplebank.accounts.customer.LocalRepoCustomerDataProvider;
@@ -33,7 +33,7 @@ public class AccountsApplication {
 	public IntegrationFlow pollingAdapterFlow(EntityManagerFactory entityManagerFactory) {
 		return IntegrationFlows
 				.from(Jpa.inboundAdapter(entityManagerFactory)
-								.entityClass(CreateTransactionOutbox.class)
+								.entityClass(CreateTransactionCommandOutbox.class)
 								.maxResults(1)
 								.expectSingleResult(true),
 						e -> e.poller(p -> p.trigger(new PeriodicTrigger(1000))))
@@ -47,7 +47,7 @@ public class AccountsApplication {
 //		troutRepo
 		return message -> {
 			log.info("MESSAGE RECEIVED!!!");
-			troutRepo.delete((CreateTransactionOutbox) message.getPayload());
+			troutRepo.delete((CreateTransactionCommandOutbox) message.getPayload());
 			log.info("MESSAGE DELETED!!!");
 		};
 	}

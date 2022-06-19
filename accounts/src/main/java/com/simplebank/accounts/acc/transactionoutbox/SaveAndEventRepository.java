@@ -1,4 +1,4 @@
-package com.simplebank.accounts;
+package com.simplebank.accounts.acc.transactionoutbox;
 
 import com.simplebank.accounts.acc.Account;
 

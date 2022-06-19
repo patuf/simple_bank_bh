@@ -1,16 +1,16 @@
 package com.simplebank.accounts.report;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -19,23 +19,37 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequestMapping("rest/v1.0/report")
 public class ReportController {
 
-    @Autowired private ReportDao reportDao;
+    @Autowired
+    private ReportDao reportDao;
+    @Autowired
+    PagedResourcesAssembler<CustomerAndBalance> custResourceAssembler;
+    @Autowired
+    PagedResourcesAssembler<AccountAndBalance> accResourceAssembler;
 
     @GetMapping("/customers")
-    public CollectionModel<EntityModel<CustomerAndBalance>> getCustomers(Pageable pageable) {
+//    public CollectionModel<EntityModel<CustomerAndBalance>> getCustomers(Pageable pageable) {
+    public PagedModel<EntityModel<CustomerAndBalance>> getCustomers(Pageable pageable) {
 
-        methodOn(ReportController.class).getCustomers(null);
-        List<EntityModel<CustomerAndBalance>> customers = reportDao.findAllCustomers(pageable).stream()
-                .map(customer -> EntityModel.of(customer,
-                        linkTo(methodOn(ReportController.class).getAccounts(customer.getCustomerId(), pageable)).withSelfRel(),
-                        linkTo(methodOn(ReportController.class).getCustomers(pageable)).withRel("customers")))
-                .collect(Collectors.toList());
+        Page<CustomerAndBalance> custPage = reportDao.findAllCustomers(pageable);
 
-        return CollectionModel.of(customers, linkTo(methodOn(ReportController.class).getCustomers(pageable)).withSelfRel());
+        return custResourceAssembler.toModel(custPage, customer -> {
+            return EntityModel.of(customer,
+                    linkTo(methodOn(ReportController.class).getAccounts(customer.getCustomerId(), pageable)).withRel("accounts"));
+        });
     }
 
     @GetMapping("/customerAccounts/{customerId}")
     public CollectionModel<EntityModel<AccountAndBalance>> getAccounts(@PathVariable long customerId, Pageable pageable) {
+        Page<AccountAndBalance> accountsPage = reportDao.findAccountByCustomerId(customerId, pageable);
+
+        return accResourceAssembler.toModel(accountsPage, account -> {
+            return EntityModel.of(account,
+                    linkTo(methodOn(ReportController.class).getTransactions(account.getId(), pageable)).withRel("transactions"));
+        });
+    }
+
+    @GetMapping("/accountTransactions/{accountId}")
+    public PagedModel<?> getTransactions(@PathVariable Long accountId, Pageable pageable) {
         return null;
     }
 

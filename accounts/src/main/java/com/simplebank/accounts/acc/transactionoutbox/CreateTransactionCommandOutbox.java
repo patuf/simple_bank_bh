@@ -1,4 +1,4 @@
-package com.simplebank.accounts.acc;
+package com.simplebank.accounts.acc.transactionoutbox;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class CreateTransactionOutbox {
+public class CreateTransactionCommandOutbox {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -19,10 +19,10 @@ public class CreateTransactionOutbox {
     @NotNull
     private double amount;
 
-    public CreateTransactionOutbox() {
+    public CreateTransactionCommandOutbox() {
     }
 
-    public CreateTransactionOutbox(long customerId, long accId, double amount) {
+    public CreateTransactionCommandOutbox(long customerId, long accId, double amount) {
         this.customerId = customerId;
         this.accId = accId;
         this.amount = amount;

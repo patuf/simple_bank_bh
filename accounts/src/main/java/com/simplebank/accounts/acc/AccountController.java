@@ -1,25 +1,21 @@
 package com.simplebank.accounts.acc;
 
-import com.simplebank.accounts.customer.CustomerNotFoundException;
-import com.simplebank.accounts.customer.CustomerRepository;
+import com.simplebank.accounts.acc.transactionoutbox.CreateTransactionCommandOutbox;
+import com.simplebank.accounts.acc.transactionoutbox.TransactionOutboxRepository;
+import com.simplebank.accounts.customer.CustomerDataProvider;
+import com.simplebank.accounts.exception.AccountNotFoundException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
-import org.springframework.hateoas.PagedModel;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.ZonedDateTime;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import javax.validation.Valid;
+import java.time.LocalDateTime;
 
 @RestController()
 @RequestMapping("rest/v1.0/account")
@@ -28,48 +24,40 @@ public class AccountController {
     @Autowired
     AccountRepository accRepo;
     @Autowired
-    CustomerRepository customerRepo;
-    @Autowired
     TransactionOutboxRepository troutRepo;
     @Autowired
     AccountModelAssembler assembler;
     @Autowired
-    KafkaTemplate<CreateTransactionOutbox, CreateTransactionOutbox> kafka;
-    @Autowired
-    PagedResourcesAssembler<Account> pagedResourcesAssembler;
+    CustomerDataProvider customerDataProvider;
 
-    @GetMapping("/byCustomer/{customerId}")
-    ResponseEntity<PagedModel<EntityModel<Account>>> getAccountsByUsedId(@PathVariable long customerId, Pageable pageable) {
-        Page<Account> accountsPage = accRepo.getAccountsByCustomerId(customerId, pageable);
+    @GetMapping("/{accountId}")
+    EntityModel<Account> one(@PathVariable long accountId) {
+        log.info("Looking for account");
+        Account account = accRepo.findById(accountId).orElseThrow(() -> new AccountNotFoundException(accountId));
+        log.info("Found account");
 
-        PagedModel<EntityModel<Account>> collModel = pagedResourcesAssembler.toModel(accountsPage);
 
-        return new ResponseEntity<>(collModel, HttpStatus.OK);
+        return assembler.toModel(account);
     }
 
-
     @PostMapping
-    @Transactional
-    ResponseEntity<?> createAccount(@RequestBody CreateAccountRequest request) {
-        customerRepo.findById(request.getCustomerId()).orElseThrow(() -> new CustomerNotFoundException(request.getCustomerId()));
-//        customerDataProvider.findById(request.getCustomerId());
-        Account newAccount = new Account(request.getCustomerId(), ZonedDateTime.now(), AccountStatus.ACTIVE);
+//    @Transactional
+//    @Validated
+    ResponseEntity<?> createAccount(@Valid @RequestBody CreateAccountRequest request) {
+        // Customer data not needed, just checking for customer existence
+//        customerRepo.findById(request.getCustomerId()).orElseThrow(() -> new CustomerNotFoundException(request.getCustomerId()));
+        customerDataProvider.findById(request.getCustomerId());
+        Account newAccount = new Account(request.getCustomerId(), LocalDateTime.now(), AccountStatus.ACTIVE);
         newAccount = accRepo.save(newAccount);
 
         if (request.getInitialCredit() != 0) {
-            troutRepo.save(new CreateTransactionOutbox(request.getCustomerId(), newAccount.getId(), request.getInitialCredit()));
+            troutRepo.save(new CreateTransactionCommandOutbox(request.getCustomerId(), newAccount.getId(), request.getInitialCredit()));
         }
 
-        EntityModel<CreateAccountRequest> entityModel = assembler.toModel(request);
+        EntityModel<Account> entityModel = assembler.toModel(newAccount);
 
         return ResponseEntity //
                 .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()) //
                 .body(entityModel);
-    }
-
-
-    void publishCreateTransactionCommand(CreateTransactionOutbox command) {
-        log.info("Gonna send to kafka now");
-//        kafka.send();
     }
 }

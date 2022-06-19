@@ -2,12 +2,13 @@ package com.simplebank.accounts.report;
 
 import com.simplebank.accounts.acc.AccountStatus;
 
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
 public class AccountAndBalance {
     private Long id;
     private Long customerId;
-    private ZonedDateTime timeCreated;
+    private LocalDateTime timeCreated;
     private AccountStatus accountStatus;
     private Double balance;
 
@@ -27,11 +28,11 @@ public class AccountAndBalance {
         this.customerId = customerId;
     }
 
-    public ZonedDateTime getTimeCreated() {
+    public LocalDateTime getTimeCreated() {
         return timeCreated;
     }
 
-    public void setTimeCreated(ZonedDateTime timeCreated) {
+    public void setTimeCreated(LocalDateTime timeCreated) {
         this.timeCreated = timeCreated;
     }
 
