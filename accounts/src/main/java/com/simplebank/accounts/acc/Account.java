@@ -10,7 +10,7 @@ import java.time.ZonedDateTime;
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long accountId;
     @NotNull
     private Long customerId;
     @NotNull
@@ -27,12 +27,12 @@ public class Account {
         this.accountStatus = accountStatus;
     }
 
-    public Long getId() {
-        return id;
+    public Long getAccountId() {
+        return accountId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setAccountId(Long id) {
+        this.accountId = id;
     }
 
     public Long getCustomerId() {

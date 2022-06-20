@@ -48,7 +48,7 @@ public class AccountController {
         Account newAccount = accRepo.save(new Account(request.getCustomerId(), LocalDateTime.now(), AccountStatus.ACTIVE));
 
         if (request.getInitialCredit() != 0) {
-            troutRepo.save(new CreateTransactionCommand(request.getCustomerId(), newAccount.getId(), request.getInitialCredit()));
+            troutRepo.save(new CreateTransactionCommand(request.getCustomerId(), newAccount.getAccountId(), request.getInitialCredit()));
         }
 
         EntityModel<Account> entityModel = accModelAssembler.toModel(newAccount);

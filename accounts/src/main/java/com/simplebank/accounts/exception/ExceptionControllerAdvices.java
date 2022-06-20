@@ -1,5 +1,8 @@
 package com.simplebank.accounts.exception;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
@@ -23,13 +26,6 @@ class ExceptionControllerAdvices {
     }
 
     @ResponseBody
-    @ExceptionHandler({RuntimeException.class})
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public String genericErrorHandler(Exception ex) {
-        return "Generic server error: " + ex.getMessage();
-    }
-
-    @ResponseBody
     @ExceptionHandler({HttpMessageNotReadableException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String badMessageFormat(HttpMessageNotReadableException ex) {
@@ -49,5 +45,15 @@ class ExceptionControllerAdvices {
             errors.put(fieldName, errorMessage);
         });
         return errors;
+    }
+
+    private final Log log = LogFactory.getLog(getClass());
+
+    @ResponseBody
+    @ExceptionHandler({RuntimeException.class})
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public String genericErrorHandler(Exception ex) {
+        log.error("Generic server error caught. See error message for details.", ex);
+        return "Generic server error: " + ex.getMessage();
     }
 }

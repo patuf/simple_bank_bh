@@ -2,24 +2,25 @@ package com.simplebank.accounts.report;
 
 import com.simplebank.accounts.customer.Customer;
 
-public class CustomerAndBalance extends Customer {
-    int numAccounts;
-    double balance;
+public class CustomerAndBalance extends Customer implements ContainsBalance {
+    Integer numAccounts;
+    Double balance;
 
-    public int getNumAccounts() {
+    public Integer getNumAccounts() {
         return numAccounts;
     }
 
-    public void setNumAccounts(int numAccounts) {
+    public void setNumAccounts(Integer numAccounts) {
         this.numAccounts = numAccounts;
     }
 
-    public double getBalance() {
+    @Override
+    public Double getBalance() {
         return balance;
     }
 
-    public void setBalance(double balance) {
+    @Override
+    public void setBalance(Double balance) {
         this.balance = balance;
     }
-
 }

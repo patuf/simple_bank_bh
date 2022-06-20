@@ -12,16 +12,17 @@ class AccountAndBalanceRowMapper extends IndexKeepingRowMapper<Long, AccountAndB
 
     @Override
     AccountAndBalance doMapRow(ResultSet rs, int rowNum) throws SQLException {
-        AccountAndBalance res = new AccountAndBalance();
-        res.setId(rs.getLong("ID"));
-        res.setCustomerId(rs.getLong("CUSTOMER_ID"));
-        res.setAccountStatus(AccountStatus.values()[rs.getInt("ACCOUNT_STATUS")]);
-        res.setTimeCreated(rs.getTimestamp("TIME_CREATED").toLocalDateTime());
-        return res;
+        AccountAndBalance row = new AccountAndBalance();
+        row.setAccountId(rs.getLong("ACCOUNT_ID"));
+        row.setCustomerId(rs.getLong("CUSTOMER_ID"));
+        row.setAccountStatus(AccountStatus.values()[rs.getInt("ACCOUNT_STATUS")]);
+        row.setTimeCreated(rs.getTimestamp("TIME_CREATED").toLocalDateTime());
+        row.setBalance(0.);
+        return row;
     }
 
     @Override
     Long getIndexValue(AccountAndBalance row) {
-        return row.getId();
+        return row.getAccountId();
     }
 }

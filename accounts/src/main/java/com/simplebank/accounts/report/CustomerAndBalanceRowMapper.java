@@ -15,6 +15,7 @@ class CustomerAndBalanceRowMapper extends IndexKeepingRowMapper<Long, CustomerAn
         row.setName(rs.getString("NAME"));
         row.setSurname(rs.getString("SURNAME"));
         row.setNumAccounts(rs.getInt("NUM_ACCS"));
+        row.setBalance(0.);
         return row;
     }
 

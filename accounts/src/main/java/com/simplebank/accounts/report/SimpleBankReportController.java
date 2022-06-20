@@ -18,10 +18,10 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController()
 @RequestMapping("rest/v1.0/report")
-public class ReportController {
+public class SimpleBankReportController {
 
     @Autowired
-    private ReportDao reportDao;
+    private SimpleBankReportService simpleBankReportService;
     @Autowired
     PagedResourcesAssembler<CustomerAndBalance> custResourceAssembler;
     @Autowired
@@ -33,17 +33,17 @@ public class ReportController {
 //    public CollectionModel<EntityModel<CustomerAndBalance>> getCustomers(Pageable pageable) {
     public PagedModel<EntityModel<CustomerAndBalance>> getCustomers(Pageable pageable) {
 
-        Page<CustomerAndBalance> custPage = reportDao.findAllCustomers(pageable);
+        Page<CustomerAndBalance> custPage = simpleBankReportService.findAllCustomers(pageable);
 
         return custResourceAssembler.toModel(custPage, customer -> {
             return EntityModel.of(customer,
-                    linkTo(methodOn(ReportController.class).getAccounts(customer.getCustomerId(), pageable)).withRel("customerAccounts"));
+                    linkTo(methodOn(SimpleBankReportController.class).getAccounts(customer.getCustomerId(), pageable)).withRel("customerAccounts"));
         });
     }
 
     @GetMapping("/customerAccounts/{customerId}")
     public CollectionModel<EntityModel<AccountAndBalance>> getAccounts(@PathVariable long customerId, Pageable pageable) {
-        Page<AccountAndBalance> accountsPage = reportDao.findAccountByCustomerId(customerId, pageable);
+        Page<AccountAndBalance> accountsPage = simpleBankReportService.findAccountsByCustomerId(customerId, pageable);
 
         return accResourceAssembler.toModel(accountsPage, accModelAssembler::toModel);
     }
@@ -53,7 +53,7 @@ public class ReportController {
         return null;
     }
 
-    public void setReportDao(ReportDao reportDao) {
-        this.reportDao = reportDao;
+    public void setSimpleBankReportService(SimpleBankReportService simpleBankReportService) {
+        this.simpleBankReportService = simpleBankReportService;
     }
 }
