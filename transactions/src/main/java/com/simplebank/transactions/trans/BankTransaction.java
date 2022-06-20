@@ -6,14 +6,14 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(indexes = {@Index(name= "accountId", columnList = "accountId")})
+@Table(indexes = {@Index(name= "accountId", columnList = "accountId"), @Index(name = "customerId", columnList = "customerId")})
 public class BankTransaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-//    @NotNull
-//    private Long customerId;
+    @NotNull
+    private Long customerId;
     @NotNull
     private Long accountId;
     @NotNull
@@ -29,13 +29,13 @@ public class BankTransaction {
         this.id = id;
     }
 
-//    public Long getCustomerId() {
-//        return customerId;
-//    }
-//
-//    public void setCustomerId(Long customerId) {
-//        this.customerId = customerId;
-//    }
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
+    }
 
     public Long getAccountId() {
         return accountId;

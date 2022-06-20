@@ -1,28 +1,24 @@
 package com.simplebank.transactions.report;
 
-import com.simplebank.transactions.trans.BankTransaction;
-
-import java.util.List;
-
 public class Balance {
 
-    private Long accountId;
+    private Long id;
     private Double balance;
 
     public Balance() {
     }
 
-    public Balance(Long accountId, Double balance) {
-        this.accountId = accountId;
+    public Balance(Long id, Double balance) {
+        this.id = id;
         this.balance = balance;
     }
 
-    public Long getAccountId() {
-        return accountId;
+    public Long getId() {
+        return id;
     }
 
-    public void setAccountId(Long accountId) {
-        this.accountId = accountId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Double getBalance() {
