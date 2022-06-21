@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Optional;
 
 @Service
@@ -36,9 +37,10 @@ public class AccountService {
         // Customer data not needed, just checking for customer existence
         customerDataProvider.findById(customerId).orElseThrow(() -> new CustomerNotFoundException(customerId));
 
-        Account newAccount = accRepo.save(new Account(customerId, LocalDateTime.now(), AccountStatus.ACTIVE));
+        LocalDateTime createdAt = LocalDateTime.now();
+        Account newAccount = accRepo.save(new Account(customerId, createdAt, AccountStatus.ACTIVE));
         if (initialCredit != 0) {
-            troutRepo.save(new CreateTransactionCommand(customerId, newAccount.getAccountId(), initialCredit));
+            troutRepo.save(new CreateTransactionCommand(customerId, newAccount.getAccountId(), initialCredit, createdAt));
         }
 
         return newAccount;

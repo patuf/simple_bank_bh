@@ -1,7 +1,5 @@
 package com.simplebank.transactions.trans;
 
-import com.sun.istack.NotNull;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -12,13 +10,9 @@ public class BankTransaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull
     private Long customerId;
-    @NotNull
     private Long accountId;
-    @NotNull
     private Double amount;
-    @NotNull
     private LocalDateTime timeCreated;
 
     public BankTransaction() {
@@ -30,6 +24,13 @@ public class BankTransaction {
      * @param timeCreated The time of creation of the transaction
      */
     public BankTransaction(Double amount, LocalDateTime timeCreated) {
+        this.amount = amount;
+        this.timeCreated = timeCreated;
+    }
+
+    public BankTransaction(Long customerId, Long accountId, Double amount, LocalDateTime timeCreated) {
+        this.customerId = customerId;
+        this.accountId = accountId;
         this.amount = amount;
         this.timeCreated = timeCreated;
     }

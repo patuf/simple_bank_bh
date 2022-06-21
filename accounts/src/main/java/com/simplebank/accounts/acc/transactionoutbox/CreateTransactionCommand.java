@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Entity
 public class CreateTransactionCommand {
@@ -13,19 +14,22 @@ public class CreateTransactionCommand {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
     @NotNull
-    private long customerId;
+    private Long customerId;
     @NotNull
-    private long accId;
+    private Long accountId;
     @NotNull
-    private double amount;
+    private Double amount;
+    @NotNull
+    private LocalDateTime timeCreated;
 
     public CreateTransactionCommand() {
     }
 
-    public CreateTransactionCommand(long customerId, long accId, double amount) {
+    public CreateTransactionCommand(Long customerId, Long accountId, Double amount, LocalDateTime timeCreated) {
         this.customerId = customerId;
-        this.accId = accId;
+        this.accountId = accountId;
         this.amount = amount;
+        this.timeCreated = timeCreated;
     }
 
     public Long getId() {
@@ -36,27 +40,35 @@ public class CreateTransactionCommand {
         this.id = id;
     }
 
-    public long getCustomerId() {
+    public Long getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(long customerId) {
+    public void setCustomerId(Long customerId) {
         this.customerId = customerId;
     }
 
-    public long getAccId() {
-        return accId;
+    public Long getAccountId() {
+        return accountId;
     }
 
-    public void setAccId(long accId) {
-        this.accId = accId;
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
     }
 
-    public double getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
+    }
+
+    public LocalDateTime getTimeCreated() {
+        return timeCreated;
+    }
+
+    public void setTimeCreated(LocalDateTime timeCreated) {
+        this.timeCreated = timeCreated;
     }
 }
