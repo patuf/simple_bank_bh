@@ -1,11 +1,13 @@
 package com.simplebank.accounts.report;
 
 import com.simplebank.accounts.acc.AccountModelAssembler;
+import com.simplebank.accounts.report.model.AccountAndBalance;
+import com.simplebank.accounts.report.model.BankTransaction;
+import com.simplebank.accounts.report.model.CustomerAndBalance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,11 +25,11 @@ public class SimpleBankReportController {
     @Autowired
     private SimpleBankReportService simpleBankReportService;
     @Autowired
-    PagedResourcesAssembler<CustomerAndBalance> custResourceAssembler;
+    private PagedResourcesAssembler<CustomerAndBalance> custResourceAssembler;
     @Autowired
-    PagedResourcesAssembler<AccountAndBalance> accResourceAssembler;
+    private PagedResourcesAssembler<AccountAndBalance> accResourceAssembler;
     @Autowired
-    AccountModelAssembler<AccountAndBalance> accModelAssembler;
+    private AccountModelAssembler<AccountAndBalance> accModelAssembler;
 
     @GetMapping("/customers")
 //    public CollectionModel<EntityModel<CustomerAndBalance>> getCustomers(Pageable pageable) {
@@ -35,25 +37,19 @@ public class SimpleBankReportController {
 
         Page<CustomerAndBalance> custPage = simpleBankReportService.findAllCustomers(pageable);
 
-        return custResourceAssembler.toModel(custPage, customer -> {
-            return EntityModel.of(customer,
-                    linkTo(methodOn(SimpleBankReportController.class).getAccounts(customer.getCustomerId(), pageable)).withRel("customerAccounts"));
-        });
+        return custResourceAssembler.toModel(custPage, customer -> EntityModel.of(customer,
+                linkTo(methodOn(SimpleBankReportController.class).getAccountsForCustomer(customer.getCustomerId(), pageable)).withRel("customerAccounts")));
     }
 
     @GetMapping("/customerAccounts/{customerId}")
-    public CollectionModel<EntityModel<AccountAndBalance>> getAccounts(@PathVariable long customerId, Pageable pageable) {
+    public PagedModel<EntityModel<AccountAndBalance>> getAccountsForCustomer(@PathVariable long customerId, Pageable pageable) {
         Page<AccountAndBalance> accountsPage = simpleBankReportService.findAccountsByCustomerId(customerId, pageable);
 
-        return accResourceAssembler.toModel(accountsPage, accModelAssembler::toModel);
+        return accResourceAssembler.toModel(accountsPage, accModelAssembler);
     }
 
     @GetMapping("/accountTransactions/{accountId}")
-    public PagedModel<?> getTransactions(@PathVariable Long accountId, Pageable pageable) {
-        return null;
-    }
-
-    public void setSimpleBankReportService(SimpleBankReportService simpleBankReportService) {
-        this.simpleBankReportService = simpleBankReportService;
+    public PagedModel<EntityModel<BankTransaction>> getTransactionsForAccount(@PathVariable Long accountId, Pageable pageable) {
+        return simpleBankReportService.getTransactionsForAccount(accountId, pageable);
     }
 }

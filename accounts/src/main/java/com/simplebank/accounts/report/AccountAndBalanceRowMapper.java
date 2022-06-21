@@ -1,12 +1,10 @@
 package com.simplebank.accounts.report;
 
 import com.simplebank.accounts.acc.AccountStatus;
-import org.springframework.jdbc.core.RowMapper;
+import com.simplebank.accounts.report.model.AccountAndBalance;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.ZonedDateTime;
-import java.util.Map;
 
 class AccountAndBalanceRowMapper extends IndexKeepingRowMapper<Long, AccountAndBalance> {
 

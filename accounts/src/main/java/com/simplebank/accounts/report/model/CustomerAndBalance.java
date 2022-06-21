@@ -1,6 +1,7 @@
-package com.simplebank.accounts.report;
+package com.simplebank.accounts.report.model;
 
 import com.simplebank.accounts.customer.Customer;
+import com.simplebank.accounts.report.model.ContainsBalance;
 
 public class CustomerAndBalance extends Customer implements ContainsBalance {
     Integer numAccounts;

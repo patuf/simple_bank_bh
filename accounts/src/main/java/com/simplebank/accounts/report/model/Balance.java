@@ -1,5 +1,8 @@
-package com.simplebank.accounts.report;
+package com.simplebank.accounts.report.model;
 
+/**
+ * A temporary data class, used to map the balance-related responses from the Transaction service
+ */
 public class Balance {
 
     private Long id;

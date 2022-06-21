@@ -15,6 +15,6 @@ public class AccountModelAssembler<T extends Account> implements RepresentationM
 
         return EntityModel.of(account, //
                 linkTo(methodOn(AccountController.class).one(account.getAccountId())).withSelfRel(),
-                linkTo(methodOn(SimpleBankReportController.class).getTransactions(account.getAccountId(), null)).withRel("transactions"));
+                linkTo(methodOn(SimpleBankReportController.class).getTransactionsForAccount(account.getAccountId(), null)).withRel("transactions"));
     }
 }

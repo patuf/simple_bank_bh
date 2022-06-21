@@ -1,4 +1,4 @@
-package com.simplebank.accounts.report;
+package com.simplebank.accounts.report.model;
 
 import com.simplebank.accounts.acc.Account;
 

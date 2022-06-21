@@ -1,10 +1,9 @@
 package com.simplebank.accounts.report;
 
-import org.springframework.jdbc.core.RowMapper;
+import com.simplebank.accounts.report.model.CustomerAndBalance;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Map;
 
 class CustomerAndBalanceRowMapper extends IndexKeepingRowMapper<Long, CustomerAndBalance> {
 
