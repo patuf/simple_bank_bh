@@ -21,6 +21,19 @@ public class BankTransaction {
     @NotNull
     private LocalDateTime timeCreated;
 
+    public BankTransaction() {
+    }
+
+    /**
+     * A shorter version of the entity, used for reporting
+     * @param amount The amount of the transaction
+     * @param timeCreated The time of creation of the transaction
+     */
+    public BankTransaction(Double amount, LocalDateTime timeCreated) {
+        this.amount = amount;
+        this.timeCreated = timeCreated;
+    }
+
     public Long getId() {
         return id;
     }
@@ -51,5 +64,13 @@ public class BankTransaction {
 
     public void setAmount(Double amount) {
         this.amount = amount;
+    }
+
+    public LocalDateTime getTimeCreated() {
+        return timeCreated;
+    }
+
+    public void setTimeCreated(LocalDateTime timeCreated) {
+        this.timeCreated = timeCreated;
     }
 }
