@@ -33,11 +33,10 @@ public class AccountService {
     }
 
     @Transactional
-    public Account createAccount(Long customerId, Double initialCredit) {
+    public Account createAccount(Long customerId, Double initialCredit, LocalDateTime createdAt) {
         // Customer data not needed, just checking for customer existence
         customerDataProvider.findById(customerId).orElseThrow(() -> new CustomerNotFoundException(customerId));
 
-        LocalDateTime createdAt = LocalDateTime.now();
         Account newAccount = accRepo.save(new Account(customerId, createdAt, AccountStatus.ACTIVE));
         if (initialCredit != 0) {
             troutRepo.save(new CreateTransactionCommand(customerId, newAccount.getAccountId(), initialCredit, createdAt));

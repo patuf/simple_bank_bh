@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @ControllerAdvice
-class ExceptionControllerAdvices {
+public class ExceptionControllerAdvices {
 
     @ResponseBody
     @ExceptionHandler({ResourceNotFoundException.class})

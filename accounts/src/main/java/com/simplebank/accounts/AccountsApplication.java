@@ -22,11 +22,14 @@ public class AccountsApplication {
 
 	@Bean
 	CustomerDataProvider customerDataProvider(CustomerRepository customerRepo) {
+		log.info("Initializing CustomerDataProvider");
 		return new LocalRepoCustomerDataProvider(customerRepo);
 	}
 
 	@Bean
 	public RestTemplate getRestTemplate() {
+
+		log.info("Initializing RestTemplate");
 		return new RestTemplate();
 	}
 }

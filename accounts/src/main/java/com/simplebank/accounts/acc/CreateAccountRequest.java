@@ -16,6 +16,10 @@ public class CreateAccountRequest {
     @NotNull(message = "initialCredit is mandatory!")
     private Double initialCredit;
 
+    public CreateAccountRequest() {
+
+    }
+
     public CreateAccountRequest(Long customerId, Double initialCredit) {
         this.customerId = customerId;
         this.initialCredit = initialCredit;
@@ -25,7 +29,17 @@ public class CreateAccountRequest {
         return customerId;
     }
 
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
+    }
+
     public Double getInitialCredit() {
         return initialCredit;
     }
+
+    public void setInitialCredit(Double initialCredit) {
+        this.initialCredit = initialCredit;
+    }
+
+
 }

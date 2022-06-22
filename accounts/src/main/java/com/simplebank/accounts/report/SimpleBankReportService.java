@@ -25,6 +25,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
+public
 class SimpleBankReportService {
     private final Log log = LogFactory.getLog(getClass());
 

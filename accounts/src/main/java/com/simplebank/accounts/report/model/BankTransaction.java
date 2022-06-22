@@ -7,39 +7,21 @@ import java.time.LocalDateTime;
 
 public class BankTransaction {
 
-//    private Long id;
-//    @NotNull
-//    private Long customerId;
-//    @NotNull
-//    private Long accountId;
     @NotNull
     private Double amount;
     @NotNull
     private LocalDateTime timeCreated;
 
-//    public Long getId() {
-//        return id;
-//    }
-//
-//    public void setId(Long id) {
-//        this.id = id;
-//    }
-//
-//    public Long getCustomerId() {
-//        return customerId;
-//    }
-//
-//    public void setCustomerId(Long customerId) {
-//        this.customerId = customerId;
-//    }
-//
-//    public Long getAccountId() {
-//        return accountId;
-//    }
-//
-//    public void setAccountId(Long accountId) {
-//        this.accountId = accountId;
-//    }
+    public BankTransaction() {
+    }
+
+    /**
+     * For testing purposes
+     */
+    public BankTransaction(Double amount, LocalDateTime timeCreated) {
+        this.amount = amount;
+        this.timeCreated = timeCreated;
+    }
 
     public Double getAmount() {
         return amount;

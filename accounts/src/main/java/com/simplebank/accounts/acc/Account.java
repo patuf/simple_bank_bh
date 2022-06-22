@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(indexes = @Index(name = "customerId", columnList = "customerId"))
@@ -63,4 +64,16 @@ public class Account {
         this.accountStatus = AccountStatus.values()[accountStatus];
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Account account = (Account) o;
+        return accountId.equals(account.accountId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(accountId);
+    }
 }

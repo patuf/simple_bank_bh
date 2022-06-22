@@ -5,11 +5,13 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 
 @RestController()
 @RequestMapping("rest/v1.0/account")
@@ -21,7 +23,7 @@ public class AccountController {
     private AccountService accService;
 
     @GetMapping("/{accountId}")
-    EntityModel<Account> one(@PathVariable long accountId) {
+    public EntityModel<Account> one(@PathVariable long accountId) {
         Account account = accService.findOne(accountId);
 
         return accModelAssembler.toModel(account);
@@ -29,13 +31,14 @@ public class AccountController {
 
     @PostMapping
     @Transactional
-    ResponseEntity<?> createAccount(@Valid @RequestBody CreateAccountRequest request) {
-        Account newAccount = accService.createAccount(request.getCustomerId(), request.getInitialCredit());
+    public ResponseEntity<?> createAccount(@Valid @RequestBody CreateAccountRequest request) {
+        Account newAccount = accService.createAccount(request.getCustomerId(), request.getInitialCredit(), LocalDateTime.now());
 
         EntityModel<Account> entityModel = accModelAssembler.toModel(newAccount);
 
         return ResponseEntity
                 .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(entityModel);
     }
 }

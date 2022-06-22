@@ -6,6 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 public class CreateTransactionCommand {
@@ -70,5 +71,18 @@ public class CreateTransactionCommand {
 
     public void setTimeCreated(LocalDateTime timeCreated) {
         this.timeCreated = timeCreated;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CreateTransactionCommand that = (CreateTransactionCommand) o;
+        return customerId.equals(that.customerId) && accountId.equals(that.accountId) && timeCreated.equals(that.timeCreated);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(customerId, accountId, timeCreated);
     }
 }

@@ -80,13 +80,44 @@
 
 	<profiles>
 		<profile>
-			<id>dev</id>
+			<id>dev-http</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<properties>
-				<spring.profiles.active>dev</spring.profiles.active>
+				<spring.profiles.active>dev,messages-http</spring.profiles.active>
 			</properties>
+		</profile>
+		<profile>
+			<id>dev-kafka</id>
+			<properties>
+				<spring.profiles.active>dev,messages-kafka</spring.profiles.active>
+			</properties>
+		</profile>
+<!--		<profile>-->
+<!--			<id>unit-test-http</id>-->
+<!--			<properties>-->
+<!--				<spring.profiles.active>unit-test,test-http</spring.profiles.active>-->
+<!--			</properties>-->
+<!--		</profile>-->
+		<profile>
+			<id>unit-test</id>
+				<properties>
+					<spring.profiles.active>unit-test,test-http</spring.profiles.active>
+				</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<includes>
+								<include>**/Test*.java</include>
+							</includes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 	</profiles>
 </project>

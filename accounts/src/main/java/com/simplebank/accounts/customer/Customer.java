@@ -15,6 +15,16 @@ public class Customer {
     @NotNull
     private String surname;
 
+    public Customer() {
+
+    }
+
+    public Customer(Long customerId, String name, String surname) {
+        this.customerId = customerId;
+        this.name = name;
+        this.surname = surname;
+    }
+
     public Long getCustomerId() {
         return customerId;
     }

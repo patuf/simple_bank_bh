@@ -22,23 +22,23 @@ public class BankTransactionsReportController {
     private final Log log = LogFactory.getLog(getClass());
 
     @Autowired
-    private BankTransactionsReportService reportDao;
+    private BankTransactionsReportService reportService;
     @Autowired
     private PagedResourcesAssembler<BankTransaction> transactionPageAssembler;
 
     @GetMapping("/balancesForAccounts")
     public List<Balance> findBalancesForAccounts(@RequestParam List<Long> entityIds) {
-        return reportDao.findBalancesForAccounts(entityIds);
+        return reportService.findBalancesForAccounts(entityIds);
     }
 
     @GetMapping("/balancesForCustomers")
     public List<Balance> findBalanceForCustomers(@RequestParam List<Long> entityIds) {
-        return reportDao.findBalancesForCustomers(entityIds);
+        return reportService.findBalancesForCustomers(entityIds);
     }
 
     @GetMapping("/transactionsForAccount")
     public PagedModel<EntityModel<BankTransaction>> getTransactionsForAccount(@RequestParam Long accountId, Pageable pageable) {
-        Page<BankTransaction> transactions = reportDao.getTransactionsForAccount(accountId, pageable);
+        Page<BankTransaction> transactions = reportService.getTransactionsForAccount(accountId, pageable);
         return transactionPageAssembler.toModel(transactions);
     }
 }

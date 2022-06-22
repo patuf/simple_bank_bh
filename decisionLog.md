@@ -23,3 +23,6 @@ No secutiry will be implemented, nor is needed by the requirements.
 ### Aggregate Roots
 Both Account and Customer are considered aggregate roots. Trying to keep the implementation closer to the real world , each of these entities seems to have its own complexity.
 Keeping them as separate aggregates would also help forking out a separate Users microservice.
+
+### Logging
+Logging will be output to the console, to keep the footprint of the application in check. 
