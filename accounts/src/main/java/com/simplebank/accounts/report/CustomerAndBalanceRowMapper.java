@@ -5,7 +5,7 @@ import com.simplebank.accounts.report.model.CustomerAndBalance;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-class CustomerAndBalanceRowMapper extends IndexKeepingRowMapper<Long, CustomerAndBalance> {
+public class CustomerAndBalanceRowMapper extends IndexKeepingRowMapper<Long, CustomerAndBalance> {
 
     @Override
     public CustomerAndBalance doMapRow(ResultSet rs, int rowNum) throws SQLException {

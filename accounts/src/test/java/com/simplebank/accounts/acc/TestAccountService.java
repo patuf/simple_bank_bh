@@ -1,4 +1,4 @@
-package com.simplebank.accounts;
+package com.simplebank.accounts.acc;
 
 import com.simplebank.accounts.acc.Account;
 import com.simplebank.accounts.acc.AccountRepository;
@@ -7,7 +7,7 @@ import com.simplebank.accounts.acc.AccountStatus;
 import com.simplebank.accounts.acc.transactionoutbox.CreateTransactionCommand;
 import com.simplebank.accounts.acc.transactionoutbox.CreateTransactionCommandRepository;
 import com.simplebank.accounts.customer.Customer;
-import com.simplebank.accounts.customer.CustomerDataProvider;
+import com.simplebank.accounts.customer.CustomerService;
 import com.simplebank.accounts.exception.AccountNotFoundException;
 import com.simplebank.accounts.exception.CustomerNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,7 +34,7 @@ public class TestAccountService {
     @Mock
     private CreateTransactionCommandRepository troutRepo;
     @Mock
-    private CustomerDataProvider customerDataProvider;
+    private CustomerService customerService;
     @InjectMocks
     private AccountService accService;
 
@@ -64,16 +64,14 @@ public class TestAccountService {
     public void testFindOne_Fail() {
         given(accRepo.findById(1L)).willReturn(Optional.empty());
 
-        assertThrows(AccountNotFoundException.class, () -> {
-            accService.findOne(1L);
-        });
+        assertThrows(AccountNotFoundException.class, () -> accService.findOne(1L));
     }
 
     @DisplayName("Creating an account with zero balance")
     @Test
     public void testCreateAccount() {
 
-        given(customerDataProvider.findById(2L)).willReturn(Optional.of(customer));
+        given(customerService.findById(2L)).willReturn(Optional.of(customer));
         given(accRepo.save(any(Account.class))).willReturn(account);
 
         verify(troutRepo, never()).save(any(CreateTransactionCommand.class));
@@ -84,7 +82,7 @@ public class TestAccountService {
     @DisplayName("Creating an account with non-zero balance")
     @Test
     public void testCreateAccountAndTransaction() {
-        given(customerDataProvider.findById(2L)).willReturn(Optional.of(customer));
+        given(customerService.findById(2L)).willReturn(Optional.of(customer));
         given(accRepo.save(any(Account.class))).willReturn(account);
         given(troutRepo.save(ctCommand200)).willReturn(ctCommand200);
 
@@ -96,7 +94,7 @@ public class TestAccountService {
     @DisplayName("Creating an account with a non existing user")
     @Test
     public void testCreateAccountNoUser() {
-        given(customerDataProvider.findById(customer.getCustomerId())).willReturn(Optional.empty());
+        given(customerService.findById(customer.getCustomerId())).willReturn(Optional.empty());
 
         assertThrows(CustomerNotFoundException.class,
                 () -> accService.createAccount(ctCommand200.getCustomerId(), ctCommand200.getAmount(), ctCommand200.getTimeCreated())

@@ -1,4 +1,4 @@
-package com.simplebank.accounts;
+package com.simplebank.accounts.report;
 
 import com.simplebank.accounts.acc.AccountModelAssembler;
 import com.simplebank.accounts.acc.AccountService;
@@ -116,7 +116,7 @@ public class TestReportRestController {
         );
         Page<BankTransaction> accPage = new PageImpl<>(accounts, pageable, 5);
 
-        PagedResourcesAssembler<BankTransaction> pra = new PagedResourcesAssembler<BankTransaction>(null, UriComponentsBuilder.fromUriString("http://localshot").build());
+        PagedResourcesAssembler<BankTransaction> pra = new PagedResourcesAssembler<>(null, UriComponentsBuilder.fromUriString("http://localshot").build());
         PagedModel<EntityModel<BankTransaction>> res = pra.toModel(accPage);
 
         given(simpleBankReportService.getTransactionsForAccount(1L, pageable)).willReturn(res);

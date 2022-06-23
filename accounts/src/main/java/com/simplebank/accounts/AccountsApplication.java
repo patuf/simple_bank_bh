@@ -1,8 +1,8 @@
 package com.simplebank.accounts;
 
-import com.simplebank.accounts.customer.CustomerDataProvider;
+import com.simplebank.accounts.customer.CustomerService;
 import com.simplebank.accounts.customer.CustomerRepository;
-import com.simplebank.accounts.customer.LocalRepoCustomerDataProvider;
+import com.simplebank.accounts.customer.LocalRepoCustomerService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.boot.SpringApplication;
@@ -20,11 +20,11 @@ public class AccountsApplication {
 		SpringApplication.run(AccountsApplication.class, args);
 	}
 
-	@Bean
-	CustomerDataProvider customerDataProvider(CustomerRepository customerRepo) {
-		log.info("Initializing CustomerDataProvider");
-		return new LocalRepoCustomerDataProvider(customerRepo);
-	}
+//	@Bean
+//    CustomerService customerDataProvider(CustomerRepository customerRepo) {
+//		log.info("Initializing CustomerDataProvider");
+//		return new LocalRepoCustomerService(customerRepo);
+//	}
 
 	@Bean
 	public RestTemplate getRestTemplate() {

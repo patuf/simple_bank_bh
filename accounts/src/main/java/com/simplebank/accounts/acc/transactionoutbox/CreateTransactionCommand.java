@@ -8,6 +8,9 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+/**
+ * The entity used to issue a "CreateTransaction" asynchronous command
+ */
 @Entity
 public class CreateTransactionCommand {
 

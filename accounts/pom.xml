@@ -103,7 +103,7 @@
 		<profile>
 			<id>unit-test</id>
 				<properties>
-					<spring.profiles.active>unit-test,test-http</spring.profiles.active>
+					<spring.profiles.active>test, unit-test,test-http</spring.profiles.active>
 				</properties>
 			<build>
 				<plugins>
