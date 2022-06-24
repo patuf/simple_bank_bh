@@ -90,8 +90,7 @@ public class TestAccountRestController {
         given(accService.findOne(1L)).willReturn(resAcc);
         mvc.perform(get("/rest/v1.0/account/1")
                 .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"customerId\": 9999, \"initialCredit\": -200}"))
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.accountId").value(200L))
                 .andExpect(jsonPath("$._links.self.href").exists())

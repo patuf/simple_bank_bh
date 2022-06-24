@@ -59,8 +59,6 @@ public class TestTransactionsControllers {
     public void testCreateTransactionAsync() throws Exception {
         BankTransaction bTr = new BankTransaction(1L, 1L, 200., LocalDateTime.now());
 
-        Pageable pageable = PageRequest.of(1, 2);
-
         String reqContent = String.format("{\"customerId\": %d, \"accountId\": %d, \"amount\": %f, \"timeCreated\": \"%s\"}",
                 bTr.getCustomerId(),
                 bTr.getAccountId(),
@@ -128,7 +126,7 @@ public class TestTransactionsControllers {
         );
         Page<BankTransaction> trPage = new PageImpl<>(result, pageable, 5);
 
-        given(reportService.getTransactionsForAccount(1l, pageable)).willReturn(trPage);
+        given(reportService.getTransactionsForAccount(1L, pageable)).willReturn(trPage);
 
         mvc.perform(get("/rest/v1.0/report/transactionsForAccount")
                 .param("page", String.valueOf(pageable.getPageNumber()))

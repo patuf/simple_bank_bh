@@ -32,7 +32,6 @@ public class TransactionOutboxConfig {
     private String pollerChannel;
 
     @Bean
-    @Profile({"messages-http"})
     public IntegrationFlow pollingAdapterFlow(EntityManagerFactory entityManagerFactory) {
         log.info("Initializing integrationflow for channel " + pollerChannel);
         return IntegrationFlows

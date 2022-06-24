@@ -56,6 +56,10 @@ public class Account {
         return accountStatus;
     }
 
+    public void setAccountStatus(String accountStatus) {
+        this.accountStatus = AccountStatus.valueOf(accountStatus);
+    }
+
     public void setAccountStatus(AccountStatus accountStatus) {
         this.accountStatus = accountStatus;
     }
