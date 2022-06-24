@@ -1,6 +1,7 @@
 package com.simplebank.transactions.report;
 
 import com.simplebank.transactions.trans.BankTransaction;
+import com.simplebank.transactions.trans.BankTransactionHttpController;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,10 @@ public class BankTransactionsReportController {
     private BankTransactionsReportService reportService;
     @Autowired
     private PagedResourcesAssembler<BankTransaction> transactionPageAssembler;
+
+    public BankTransactionsReportController() {
+        log.info("BankTransactionsReportController initialized");
+    }
 
     @GetMapping("/balancesForAccounts")
     public List<Balance> findBalancesForAccounts(@RequestParam List<Long> entityIds) {

@@ -23,6 +23,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -44,7 +45,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-public class TestReportingService {
+public class TestBankTransactionReportingService {
 
     @MockBean
     private RestTemplate restTemplate;
@@ -56,7 +57,7 @@ public class TestReportingService {
 //    private Customer customer;
 //    private List<CustomerAndBalance> customersAndBalances;
 //    private CreateTransactionCommand ctCommand0, ctCommand200;
-    private PageRequest pageable;
+    private Pageable pageable;
 
     @BeforeEach
     public void setup() {

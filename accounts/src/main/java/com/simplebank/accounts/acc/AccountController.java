@@ -30,7 +30,6 @@ public class AccountController {
     }
 
     @PostMapping
-    @Transactional
     public ResponseEntity<?> createAccount(@Valid @RequestBody CreateAccountRequest request) {
         Account newAccount = accService.createAccount(request.getCustomerId(), request.getInitialCredit(), LocalDateTime.now());
 

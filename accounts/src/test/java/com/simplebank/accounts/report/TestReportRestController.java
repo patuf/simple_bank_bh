@@ -21,6 +21,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.HateoasPageableHandlerMethodArgumentResolver;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
@@ -60,7 +61,7 @@ public class TestReportRestController {
     @Test
     public void testGetCustomers() throws Exception {
 
-        PageRequest pageable = PageRequest.of(1, 2);
+        Pageable pageable = PageRequest.of(1, 2);
         List<CustomerAndBalance> result = Arrays.asList(
                 new CustomerAndBalance(1L, "Test1", "Sur1", 1, 100.),
                 new CustomerAndBalance(2L, "Test2", "Sur2", 2, 200.));
@@ -84,7 +85,7 @@ public class TestReportRestController {
 
     @Test
     public void testGetAccountsForCustomer() throws Exception {
-        PageRequest pageable = PageRequest.of(1, 2);
+        Pageable pageable = PageRequest.of(1, 2);
         List<AccountAndBalance> accounts = Arrays.asList(
                 new AccountAndBalance(1L, 2L, LocalDateTime.now(), AccountStatus.ACTIVE, 200.),
                 new AccountAndBalance(2L, 2L, LocalDateTime.now(), AccountStatus.ACTIVE, 300.)
@@ -109,7 +110,7 @@ public class TestReportRestController {
 
     @Test
     public void testGetTransactionsForAccount() throws Exception {
-        PageRequest pageable = PageRequest.of(1, 2);
+        Pageable pageable = PageRequest.of(1, 2);
         List<BankTransaction> accounts = Arrays.asList(
                 new BankTransaction(200., LocalDateTime.now()),
                 new BankTransaction(300., LocalDateTime.now())

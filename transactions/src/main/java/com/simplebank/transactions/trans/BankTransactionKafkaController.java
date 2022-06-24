@@ -29,7 +29,7 @@ public class BankTransactionKafkaController {
     }
 
     @KafkaListener(topics = "#{'${bank.transactions.kafka.topic}'}")
-    public void subscribe(BankTransaction bankTransaction) throws IOException {
+    public void receiveCreateTransactionCommand(BankTransaction bankTransaction) throws IOException {
         log.debug(String.format("Consumed Create Message Kafka command for amount -> %s", bankTransaction.getAmount()));
         // Ignore command's ID, and insert in the table with freshly generated ID
         bankTransaction.setId(null);

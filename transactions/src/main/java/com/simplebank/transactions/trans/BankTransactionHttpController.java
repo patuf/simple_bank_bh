@@ -13,20 +13,22 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController()
-@Profile({"messages-http"})
+@Profile({"messages-http", "test"})
 @RequestMapping("rest/v1.0/transaction")
 public class BankTransactionHttpController {
     private final Log log = LogFactory.getLog(getClass());
 
-    @Autowired private TaskExecutor taskExecutor;
-    @Autowired private BankTransactionRepository btRepo;
+    @Autowired
+    private TaskExecutor taskExecutor;
+    @Autowired
+    private BankTransactionRepository btRepo;
 
     public BankTransactionHttpController() {
         log.info("BankTransactionHttpController initialized");
     }
 
-    @PostMapping()
-    public ResponseEntity<?> findBalancesForAccounts(@Valid @RequestBody BankTransaction bankTransaction) {
+    @PostMapping
+    public ResponseEntity<?> createTransactionAsync(@Valid @RequestBody BankTransaction bankTransaction) {
         log.debug(String.format("Consumed Create Message HTTP command for amount -> %s", bankTransaction.getAmount()));
         // Ignore command's ID, and insert in the table with freshly generated ID
         bankTransaction.setId(null);

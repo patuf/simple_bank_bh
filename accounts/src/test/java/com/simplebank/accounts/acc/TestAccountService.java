@@ -36,7 +36,7 @@ public class TestAccountService {
     @Mock
     private CustomerService customerService;
     @InjectMocks
-    private AccountService accService;
+    private AccountServiceImpl accService;
 
     private Account account;
     private Customer customer;

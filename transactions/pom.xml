@@ -86,5 +86,24 @@
 				<spring.profiles.active>dev,messages-kafka</spring.profiles.active>
 			</properties>
 		</profile>
+		<profile>
+			<id>unit-test</id>
+			<properties>
+				<spring.profiles.active>test, unit-test,test-http</spring.profiles.active>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<includes>
+								<include>**/Test*.java</include>
+							</includes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 </project>
