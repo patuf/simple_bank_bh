@@ -63,7 +63,7 @@ class SimpleBankReportServiceImpl implements SimpleBankReportService {
                         "GROUP BY c.CUSTOMER_ID " +
                         "LIMIT :lim OFFSET :ofs",
                 namedParameters, rowMapper);
-        enrichWithBalances(balForCustUri, customers, Customer::getCustomerId, rowMapper);
+        enrichWithBalances(balForCustUri, rowMapper);
 
         return new PageImpl<>(customers, pageable, count);
     }
@@ -94,7 +94,7 @@ class SimpleBankReportServiceImpl implements SimpleBankReportService {
                         "WHERE CUSTOMER_ID = :customerId " +
                         "LIMIT :lim OFFSET :ofs",
                 namedParameters, rowMapper);
-        enrichWithBalances(balForAccUri, accounts, Account::getAccountId, rowMapper);
+        enrichWithBalances(balForAccUri, rowMapper);
 
         return new PageImpl<>(accounts, pageable, count);
     }
@@ -110,11 +110,16 @@ class SimpleBankReportServiceImpl implements SimpleBankReportService {
         return restTemplate.getForObject(uri, BankTransactionPagedModel.class);
     }
 
-    private <K extends ContainsBalance> void enrichWithBalances(String uriString, List<K> entities, Function<K, Long> idFinder, IndexKeepingRowMapper<Long, K> rowMapper) {
+    /**
+     * Enriches a list of ContainsBalance entities with
+     * @param uriString The uri of the BankTransactions' synchronous rest endpoint that retrieves the balances for this type of entity.
+     * @param rowMapper The IndexKeepingRowMapper that was used for mapping the resultSet into domain objects and keeps an in-memory index map of them.
+     * @param <K> The particular type of the business object that was mapped by the IndexKeepingRowMapper
+     */
+    private <K extends ContainsBalance> void enrichWithBalances(String uriString, IndexKeepingRowMapper<Long, K> rowMapper) {
         log.debug("Enriching with balances for uri " + uriString);
-        List<Long> entityIds = entities.stream().map(idFinder).collect(Collectors.toList());
         URI uri = UriComponentsBuilder.fromUriString(uriString)
-                .queryParam("entityIds", entityIds)
+                .queryParam("entityIds", rowMapper.getIndexes())
                 .build().toUri();
         Balance[] balances = restTemplate.getForObject(uri, Balance[].class);
         assert balances != null;

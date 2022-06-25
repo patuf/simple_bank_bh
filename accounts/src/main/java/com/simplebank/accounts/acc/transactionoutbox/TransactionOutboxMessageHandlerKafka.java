@@ -4,16 +4,20 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Profile;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessagingException;
 import org.springframework.stereotype.Service;
-import org.springframework.messaging.MessageHandler;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * This class acts as the Polling Publisher for the Transaction outbox that sends commands to
+ * the BankTransactions service. This particular implementation uses a KafkaTemplate to send
+ * asynchronous commands to a KafkaServer.
+ */
 @Service
 public class TransactionOutboxMessageHandlerKafka implements MessageHandler {
     private final Log log = LogFactory.getLog(getClass());

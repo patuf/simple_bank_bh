@@ -13,6 +13,11 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
+/**
+ * This class acts as the Polling Publisher for the Transaction outbox that sends commands to
+ * the BankTransactions service. This particular implementation uses a RestTemplate to send asynchronous commands to the
+ * BankTransactions service.
+ */
 @Service
 public class TransactionOutboxMessageHandlerHttp implements MessageHandler {
     private final Log log = LogFactory.getLog(getClass());

@@ -15,9 +15,6 @@ public class BankTransaction {
     public BankTransaction() {
     }
 
-    /**
-     * For testing purposes
-     */
     public BankTransaction(Double amount, LocalDateTime timeCreated) {
         this.amount = amount;
         this.timeCreated = timeCreated;

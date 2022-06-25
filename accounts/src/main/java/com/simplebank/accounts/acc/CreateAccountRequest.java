@@ -2,12 +2,11 @@ package com.simplebank.accounts.acc;
 
 import org.springframework.validation.annotation.Validated;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
+/**
+ * This data class maps the createAccount command payload that comes from the REST controller.
+ */
 @Validated
 public class CreateAccountRequest {
 
@@ -17,7 +16,6 @@ public class CreateAccountRequest {
     private Double initialCredit;
 
     public CreateAccountRequest() {
-
     }
 
     public CreateAccountRequest(Long customerId, Double initialCredit) {

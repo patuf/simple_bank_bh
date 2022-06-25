@@ -2,7 +2,10 @@ package com.simplebank.accounts.customer;
 
 import java.util.Optional;
 
+/**
+ * A service providing the necessary commands to manage the CRUD lifecycle of Accounts.
+ */
 public interface CustomerService {
 
-    Optional<Customer> findById(long customerId);
+    Customer findById(long customerId);
 }

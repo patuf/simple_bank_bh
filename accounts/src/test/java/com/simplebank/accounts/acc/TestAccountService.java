@@ -71,7 +71,7 @@ public class TestAccountService {
     @Test
     public void testCreateAccount() {
 
-        given(customerService.findById(2L)).willReturn(Optional.of(customer));
+        given(customerService.findById(2L)).willReturn(customer);
         given(accRepo.save(any(Account.class))).willReturn(account);
 
         verify(troutRepo, never()).save(any(CreateTransactionCommand.class));
@@ -82,7 +82,7 @@ public class TestAccountService {
     @DisplayName("Creating an account with non-zero balance")
     @Test
     public void testCreateAccountAndTransaction() {
-        given(customerService.findById(2L)).willReturn(Optional.of(customer));
+        given(customerService.findById(2L)).willReturn(customer);
         given(accRepo.save(any(Account.class))).willReturn(account);
         given(troutRepo.save(ctCommand200)).willReturn(ctCommand200);
 
@@ -94,7 +94,7 @@ public class TestAccountService {
     @DisplayName("Creating an account with a non existing user")
     @Test
     public void testCreateAccountNoUser() {
-        given(customerService.findById(customer.getCustomerId())).willReturn(Optional.empty());
+        given(customerService.findById(customer.getCustomerId())).willThrow(new CustomerNotFoundException(ctCommand200.getCustomerId()));
 
         assertThrows(CustomerNotFoundException.class,
                 () -> accService.createAccount(ctCommand200.getCustomerId(), ctCommand200.getAmount(), ctCommand200.getTimeCreated())

@@ -6,6 +6,9 @@ import com.simplebank.accounts.report.model.AccountAndBalance;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * An extension of IndexKeepingRowMapper that cares for mapping result sets to the AccountAndBalance domain object
+ */
 class AccountAndBalanceRowMapper extends IndexKeepingRowMapper<Long, AccountAndBalance> {
 
     @Override

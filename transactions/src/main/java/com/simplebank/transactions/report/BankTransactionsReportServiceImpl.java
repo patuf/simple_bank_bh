@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 import java.sql.ResultSet;
 import java.util.List;
 
+/**
+ * An implementation of BankTransactionsReportService that works with the configured SQL database.
+ */
 @Service
 public class BankTransactionsReportServiceImpl implements BankTransactionsReportService {
 
@@ -34,7 +37,6 @@ public class BankTransactionsReportServiceImpl implements BankTransactionsReport
         SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("accountIds", accountIds);
 
         return jdbcTemplate.query(query, namedParameters, balanceRowMapper("ACCOUNT_ID"));
-//                (ResultSet rs, int rowNum) -> new Balance(rs.getLong("ACCOUNT_ID"), rs.getDouble("BALANCE"))
     }
 
     @Override

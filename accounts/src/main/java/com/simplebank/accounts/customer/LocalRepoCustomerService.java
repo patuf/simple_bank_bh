@@ -1,5 +1,6 @@
 package com.simplebank.accounts.customer;
 
+import com.simplebank.accounts.exception.CustomerNotFoundException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class LocalRepoCustomerService implements CustomerService {
     }
 
     @Override
-    public Optional<Customer> findById(long customerId) {
-        return customerRepo.findById(customerId);
+    public Customer findById(long customerId) {
+        return customerRepo.findById(customerId).orElseThrow(() -> new CustomerNotFoundException(customerId));
     }
 }

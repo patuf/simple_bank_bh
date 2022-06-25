@@ -3,7 +3,6 @@ package com.simplebank.accounts.acc;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.Objects;
 
 @Entity

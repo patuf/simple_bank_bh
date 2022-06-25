@@ -17,6 +17,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * The REST controller providing the reposting services for SimpleBank.
+ * Separating the reporting controller from the CRUD controller facilitates easier implementation of the CQRS pattern.
+ */
 @RestController()
 @RequestMapping("rest/v1.0/report")
 public class SimpleBankReportController {
@@ -33,6 +37,11 @@ public class SimpleBankReportController {
     @Autowired
     private CustomerModelAssembler<CustomerAndBalance> cbModelAssembler;
 
+    /**
+     * GET endpoint. Finds a Page of customers, along with their balances. Not sortable.
+     * @param pageable the paging options
+     * @return A HATEOAS-compliant PagedModel of customers and their balances. Empty page if none are found.
+     */
     @GetMapping("/customers")
     public PagedModel<EntityModel<CustomerAndBalance>> getCustomers(Pageable pageable) {
 
@@ -42,6 +51,12 @@ public class SimpleBankReportController {
         return custResourceAssembler.toModel(custPage, cbModelAssembler);
     }
 
+    /**
+     * GET endpoint. Finds a Page of accounts for a given customerId, along with their balances. Not sortable.
+     * @param customerId the id of the customer
+     * @param pageable the paging options
+     * @return A HATEOAS-compliant PagedModel of accounts for the given customerId, along with the balance for each account.
+     */
     @GetMapping("/customerAccounts/{customerId}")
     public PagedModel<EntityModel<AccountAndBalance>> getAccountsForCustomer(@PathVariable long customerId, Pageable pageable) {
         Page<AccountAndBalance> accountsPage = simpleBankReportService.findAccountsByCustomerId(customerId, pageable);
@@ -50,6 +65,13 @@ public class SimpleBankReportController {
         return entityModels;
     }
 
+    /**
+     * GET endpoint. Finds a page of transactions for a given accountId.
+     * This method queries the BankTransaction service and directly return the results form it.
+     * @param accountId the id of the account
+     * @param pageable the paging options
+     * @return A HATEOAS compliant PagedModel of the page of transactions.
+     */
     @GetMapping("/accountTransactions/{accountId}")
     public PagedModel<EntityModel<BankTransaction>> getTransactionsForAccount(@PathVariable Long accountId, Pageable pageable) {
         return simpleBankReportService.getTransactionsForAccount(accountId, pageable);

@@ -12,11 +12,12 @@ import org.springframework.integration.dsl.IntegrationFlows;
 import org.springframework.integration.jpa.dsl.Jpa;
 import org.springframework.messaging.MessageHandler;
 import org.springframework.scheduling.support.PeriodicTrigger;
-import org.springframework.web.client.RestTemplate;
 
 import javax.persistence.EntityManagerFactory;
-import java.util.List;
 
+/**
+ * This configuration provides the beans needed for the Transaction Outbox to work.
+ */
 @Configuration
 @Profile("!test")
 public class TransactionOutboxConfig {
@@ -31,6 +32,14 @@ public class TransactionOutboxConfig {
     @Value("${account.transactionoutbox.poller.channel}")
     private String pollerChannel;
 
+    /**
+     * The bean registers an Integration flow form a JPA inboundAdapter. The adapter periodically polls the
+     * CREATE_TRANSACTION_COMMAND table (with period <account.transactionoutbox.poller.waittimemillis>) and sends
+     * a maximum of <account.transactionoutbox.poller.maxresults> results to the inputChannel named
+     * <account.transactionoutbox.poller.channel>.
+     * @param entityManagerFactory
+     * @return The instantiated and parameterized Integration flow.
+     */
     @Bean
     public IntegrationFlow pollingAdapterFlow(EntityManagerFactory entityManagerFactory) {
         log.info("Initializing integrationflow for channel " + pollerChannel);
@@ -44,6 +53,10 @@ public class TransactionOutboxConfig {
                 .get();
     }
 
+    /**
+     * Registers the TransactionOutboxMessageHandlerKafka as a Polling Publisher listening on the "transactionOut"
+     * inputChannel.
+     */
     @Bean
     @Profile({"messages-kafka"})
     @ServiceActivator(inputChannel = "transactionOut")
@@ -52,6 +65,10 @@ public class TransactionOutboxConfig {
         return kafkaPublishingMessageHandler;
     }
 
+    /**
+     * Registers the TransactionOutboxMessageHandlerKafka as a Polling Publisher listening on the "transactionOut"
+     * inputChannel.
+     */
     @Bean
     @Profile({"messages-http"})
     @ServiceActivator(inputChannel = "transactionOut")

@@ -11,6 +11,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * The SpringBootApplication for the Accounts service.
+ */
 @SpringBootApplication
 @EnableTransactionManagement
 public class AccountsApplication {
@@ -19,12 +22,6 @@ public class AccountsApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(AccountsApplication.class, args);
 	}
-
-//	@Bean
-//    CustomerService customerDataProvider(CustomerRepository customerRepo) {
-//		log.info("Initializing CustomerDataProvider");
-//		return new LocalRepoCustomerService(customerRepo);
-//	}
 
 	@Bean
 	public RestTemplate getRestTemplate() {

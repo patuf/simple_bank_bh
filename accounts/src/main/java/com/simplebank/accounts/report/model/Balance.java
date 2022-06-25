@@ -1,7 +1,8 @@
 package com.simplebank.accounts.report.model;
 
 /**
- * A temporary data class, used to map the balance-related responses from the Transaction service
+ * A temporary data class, used to map the balance-related responses coming from the BankTransactions service,
+ * to the dataclasses coming from the Accounts service
  */
 public class Balance {
 

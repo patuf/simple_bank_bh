@@ -15,9 +15,18 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A controller advice used to provide handling behaviour for the possible Exceptions around the controllers used.
+ */
 @ControllerAdvice
 public class ExceptionControllerAdvices {
+    private final Log log = LogFactory.getLog(getClass());
 
+    /**
+     * Handler for ResourceNotFoundException's
+     * @param ex the concrete exception
+     * @return A response body as a String
+     */
     @ResponseBody
     @ExceptionHandler({ResourceNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -25,6 +34,11 @@ public class ExceptionControllerAdvices {
         return ex.getMessage();
     }
 
+    /**
+     * Handler for exceptions connected to parsing the request payload
+     * @param ex the concrete exception instance
+     * @return A response body as a String
+     */
     @ResponseBody
     @ExceptionHandler({HttpMessageNotReadableException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -32,6 +46,11 @@ public class ExceptionControllerAdvices {
         return "Message not readable. Make sure it's a valid JSON!";
     }
 
+    /**
+     * Handler for exceptions connected to validating requests
+     * @param ex the concrete exception instance
+     * @return A response body as a String
+     */
     @ResponseBody
     @ExceptionHandler({MethodArgumentNotValidException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -47,8 +66,11 @@ public class ExceptionControllerAdvices {
         return errors;
     }
 
-    private final Log log = LogFactory.getLog(getClass());
-
+    /**
+     * Handler for generic axceptions, not handled by the other handlers.
+     * @param ex the concrete exception instance
+     * @return A response body as a String
+     */
     @ResponseBody
     @ExceptionHandler({RuntimeException.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

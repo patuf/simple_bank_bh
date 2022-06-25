@@ -11,6 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
+/**
+ * An implementation of AccountService that works with the configured JPA repositories.
+ */
 @Service
 public class AccountServiceImpl implements AccountService {
     @Autowired
@@ -35,7 +38,7 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     public Account createAccount(Long customerId, Double initialCredit, LocalDateTime createdAt) {
         // Customer data not needed, just checking for customer existence
-        customerService.findById(customerId).orElseThrow(() -> new CustomerNotFoundException(customerId));
+        customerService.findById(customerId);
 
         Account newAccount = accRepo.save(new Account(customerId, createdAt, AccountStatus.ACTIVE));
         if (initialCredit != 0) {
