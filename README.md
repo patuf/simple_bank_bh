@@ -132,11 +132,12 @@ Navigate to the chosen subdirectory and type:
 
 ## Accessing H2's console 
 Both services have their H2 console exposed
-Accounts console: 
+
+Accounts' H2 console: 
 
     http://localhost:8080/h2-console/login.jsp
 
-Banks Transactions console
+Banks Transactions' H2 console:
 
     http://localhost:8081/h2-console/login.jsp
 
